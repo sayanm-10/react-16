@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
 import loggify from "./loggify";
 
+import PollChild from "./PollChild";
+
 class App extends Component {
+    state = {};
+
     componentDidMount() {
         const ctx = this.refs.appCanvas.getContext('2d');
         ctx.fillStyle = "blue";
@@ -11,6 +15,8 @@ class App extends Component {
 
 
     render() {
+        const {showPollChild} = this.state;
+
         return (
             <div>
                 <h1 className="App">
@@ -18,6 +24,12 @@ class App extends Component {
                 </h1>
 
                 <canvas ref={"appCanvas"} width={200} height={200} />
+
+                <button onClick={() => this.setState((prevState) => ({showPollChild: !prevState.showPollChild})) }>
+                    {showPollChild ? "Hide": "Show"} Child
+                </button>
+                
+                {showPollChild ? <PollChild /> : null}
             </div>
         );
     }

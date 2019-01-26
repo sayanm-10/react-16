@@ -4,7 +4,7 @@ import styled from "styled-components";
 const loggify = (Wrapped) => {
     let originals = {};
 
-    const methodsToLog = ["componentWillMount", "componentDidMount"];
+    const methodsToLog = ["componentWillMount", "componentDidMount", "componentWillUnmount"];
 
     methodsToLog.forEach(method => {
         if(Wrapped.prototype[method]) {
