@@ -1,19 +1,23 @@
 import React, { Component } from 'react';
+import loggify from "./loggify";
 
 class App extends Component {
-    testClick = () => {
-        console.log("hmmmmm");
-        // console.log(this.props);
-    };
+    componentDidMount() {
+        const ctx = this.refs.appCanvas.getContext('2d');
+        ctx.fillStyle = "blue";
+        ctx.arc(75, 75, 50, 0, 2 * Math.PI);
+        ctx.fill();
+    }
+
 
     render() {
-        console.log(this.props);
         return (
             <div>
                 <h1 className="App">
                     App
                 </h1>
-                <button onClick={this.testClick}>Click</button>
+
+                <canvas ref={"appCanvas"} width={200} height={200} />
             </div>
         );
     }
@@ -41,5 +45,7 @@ App.displayName = "LoggerApp";
 App.defaultProps = {
     data: []
 };
+
+App = loggify(App);
 
 export default App;
