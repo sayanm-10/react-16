@@ -7,10 +7,19 @@ class App extends Component {
     state = {};
 
     componentDidMount() {
-        const ctx = this.refs.appCanvas.getContext('2d');
-        ctx.fillStyle = "blue";
-        ctx.arc(75, 75, 50, 0, 2 * Math.PI);
-        ctx.fill();
+        this.ctx = this.refs.appCanvas.getContext('2d');
+        this.ctx.fillStyle = "blue";
+        this.ctx.arc(75, 75, 50, 0, 2 * Math.PI);
+        this.ctx.fill();
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevState.pollChildValue !== this.state.pollChildValue) {
+            let {ctx} =  this;
+            ctx.fillStyle = this.state.pollChildValue % 2 === 1 ? "green" : "red";
+            this.ctx.arc(75, 75, 50, 0, 2 * Math.PI);
+            this.ctx.fill();
+        }
     }
 
 
@@ -29,7 +38,7 @@ class App extends Component {
                     {showPollChild ? "Hide": "Show"} Child
                 </button>
                 
-                {showPollChild ? <PollChild /> : null}
+                {showPollChild ? <PollChild pollChange={(pollChildValue) => this.setState({pollChildValue})} /> : null}
             </div>
         );
     }

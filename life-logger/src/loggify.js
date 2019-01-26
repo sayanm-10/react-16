@@ -4,7 +4,13 @@ import styled from "styled-components";
 const loggify = (Wrapped) => {
     let originals = {};
 
-    const methodsToLog = ["componentWillMount", "componentDidMount", "componentWillUnmount"];
+    const methodsToLog = [
+        "componentWillMount",
+        "componentDidMount",
+        "componentWillUnmount",
+        "shouldComponentUpdate",
+        "componentDidUpdate"
+    ];
 
     methodsToLog.forEach(method => {
         if(Wrapped.prototype[method]) {
@@ -16,13 +22,28 @@ const loggify = (Wrapped) => {
             let original = originals[method];
 
             console.groupCollapsed(`${Wrapped.displayName} called ${method}`);
+
+            if (method === "shouldComponentUpdate") {
+                console.log("nextProps", args[0]);
+                console.log("nextState", args[1]);
+            }
+
+            if (method === "componentDidUpdate") {
+                console.log("prevProps", args[0]);
+                console.log("prevState", args[1]);
+            }
+
             console.groupEnd();
 
             if (original) {
                 original = original.bind(this);
-                original(...args);
+                // return was added for shouldComponentUpdate
+                return original(...args);
             }
 
+            if (method === "shouldComponentUpdate" && typeof original === 'undefined') {
+                return true;
+            }
         }
     });
 

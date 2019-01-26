@@ -15,8 +15,10 @@ class PollChild extends Component {
             () => {
                 console.log("Poll!");
                 this.setState({
-                    poll: Math.random()
-                });
+                    poll: Math.round(10 * Math.random() + 1)
+                },
+                    () => {this.props.pollChange(this.state.poll);}
+                );
             },
             1000
         )
@@ -24,6 +26,13 @@ class PollChild extends Component {
 
     componentWillUnmount() {
         clearInterval(this.pollInterval);
+    }
+
+    // improve efficiency by taking a look at the state change
+    shouldComponentUpdate(nextProps, nextState, nextContext) {
+        if (nextState.poll !== this.state.poll) {
+            return true;
+        }
     }
 
     render() {
